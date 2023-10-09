@@ -1,6 +1,6 @@
-val ktor_version: String by project
-val kotlin_version: String by project
-val logback_version: String by project
+val ktorVersion: String by project
+val kotlinVersion: String by project
+val logbackVersion: String by project
 
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
@@ -11,6 +11,8 @@ plugins {
 
     // Add Ktor Gradle plugin
     id("io.ktor.plugin") version "2.3.5"
+
+    kotlin("plugin.serialization") version "1.9.0"
 }
 
 group = "blog.api.ktor"
@@ -35,38 +37,38 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
 
     // Add Content Negotiation plugin
-    implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
+    implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
 
     // Add serialization
-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
     // Add Ktor core dependencies
-    implementation("io.ktor:ktor-server-core:$ktor_version")
-    implementation("io.ktor:ktor-server-netty:$ktor_version")
+    implementation("io.ktor:ktor-server-core:$ktorVersion")
+    implementation("io.ktor:ktor-server-netty:$ktorVersion")
 
     // Add CORS
-    implementation("io.ktor:ktor-server-cors:$ktor_version")
+    implementation("io.ktor:ktor-server-cors:$ktorVersion")
 
     // Add status pages
-    implementation("io.ktor:ktor-server-status-pages:$ktor_version")
+    implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
     
     // Add Swagger
-    implementation("io.ktor:ktor-server-openapi")
-    implementation("io.ktor:ktor-server-swagger")
+    implementation("io.ktor:ktor-server-openapi:$ktorVersion")
+    implementation("io.ktor:ktor-server-swagger:$ktorVersion")
 
     // Add logback
-    implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("ch.qos.logback:logback-classic:$logbackVersion")
 
     // Add logging
-    implementation("io.ktor:ktor-server-call-logging:$kotlin_version")
+    implementation("io.ktor:ktor-server-call-logging:$kotlinVersion")
 
     // Add YAML dependency to read YAML config
-    implementation("io.ktor:ktor-server-config-yaml:$ktor_version")
+    implementation("io.ktor:ktor-server-config-yaml:$ktorVersion")
     implementation("io.ktor:ktor-server-cors-jvm:2.3.5")
 
     // Unit tests
-    testImplementation("io.ktor:ktor-server-tests:$ktor_version")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
