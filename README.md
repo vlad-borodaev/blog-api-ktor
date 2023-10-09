@@ -19,4 +19,22 @@ Follow this guide to create a new Ktor project manually in terminal.
 
 // # Run the application
 // gradle run
+
+// # Refresh the dependencies
+// gradle build --refresh-dependencies
+
+// # Configure the app to use Kotlin/Native
+
+// # Install Postgres driver
+// macOS brew install libpq
+// ubuntu apt-get install libpq-dev
 ```
+
+# TODO
+- Use Kotlin Native
+- Setup MVC structure
+- Add CRUD
+- Setup ORM (Prisma)
+- Setup Swagger
+- Setup all the other necessary things
+- Setup Docker
