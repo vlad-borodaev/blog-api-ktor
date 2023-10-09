@@ -5,15 +5,22 @@
  * For more details on building Java & JVM projects, please refer to https://docs.gradle.org/8.4/userguide/building_java_projects.html in the Gradle documentation.
  */
 
+val psql_driver_version = "0.0.4"
+val kotlinx_serialization_version = "1.4.0"
+
 plugins {
-    // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
-    id("org.jetbrains.kotlin.jvm") version "1.9.10"
+    // // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
+    // id("org.jetbrains.kotlin.jvm") version "1.9.10"
 
     // Apply the application plugin to add support for building a CLI application in Java.
     application
 
     // Add Ktor Gradle plugin
     id("io.ktor.plugin") version "2.3.5"
+
+    kotlin("multiplatform") version "1.7.21"
+    kotlin("plugin.serialization") version "1.7.21"
+    id("app.cash.sqldelight") version "2.0.0-alpha04"
 }
 
 repositories {
@@ -21,10 +28,18 @@ repositories {
     mavenCentral()
 }
 
-ktor {
-    fatJar {
-        archiveFileName.set("blog-api-ktor.jar")
+// ktor {
+//     fatJar {
+//         archiveFileName.set("blog-api-ktor.jar")
+//     }
+// }
+
+sqldelight {
+    database("NativePostgres") {
+        dialect("app.softwork:postgres-native-sqldelight-dialect:$psql_driver_version")
+        packageName = "com.nativeserver.sqldelight"
     }
+    linkSqlite = false
 }
 
 dependencies {
@@ -49,6 +64,21 @@ dependencies {
     // Add Ktor base dependencies
     implementation("io.ktor:ktor-server-core")
     implementation("io.ktor:ktor-server-netty")
+    implementation("io.ktor:ktor-server-cio")
+
+    implementation("io.ktor:ktor-serialization-kotlinx-json")
+    implementation("io.ktor:ktor-server-content-negotiation")
+
+    implementation("app.softwork:postgres-native-sqldelight-driver:$psql_driver_version")
+    
+    // Fix for kotlinx serialization version sync bug 
+    // https://github.com/hfhbd/postgres-native-sqldelight/issues/100
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinx_serialization_version") {
+        version { strictly(kotlinx_serialization_version) }
+    }
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_version") {
+        version { strictly(kotlinx_serialization_version) }
+    }
     
     // Add Swagger
     implementation("io.ktor:ktor-server-openapi")
@@ -70,4 +100,41 @@ application {
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+}
+
+kotlin {
+    val hostOs = System.getProperty("os.name")
+    val commonTarget = when {
+        hostOs == "Mac OS X" -> when(System.getProperty("os.arch")) {
+            "aarch64" -> macosArm64("common")
+            else -> macosArm64("common")
+        }
+        hostOs == "Linux" -> linuxX64("common")
+        else -> throw GradleException("Host OS is not supported in Kotlin/Native + Ktor.")
+    }
+
+    commonTarget.apply {
+        binaries {
+            executable {
+                entryPoint = "com.nativeserver.main"
+            }
+        }
+    }
+
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation("app.softwork:postgres-native-sqldelight-driver")
+    
+                // Fix for kotlinx serialization version sync bug 
+                // https://github.com/hfhbd/postgres-native-sqldelight/issues/100
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinx_serialization_version") {
+                    version { strictly(kotlinx_serialization_version) }
+                }
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_version") {
+                    version { strictly(kotlinx_serialization_version) }
+                }
+            }
+        }
+    }
 }
