@@ -31,18 +31,15 @@ dependencies {
     // This dependency is used by the application.
     implementation("com.google.guava:guava:32.1.1-jre")
 
-    // Align versions of all Kotlin components
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
-
     // Use Kotlin JDK standard library
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
 
     // Add Content Negotiation plugin
-    implementation("io.ktor:ktor-server-content-negotiation-jvm")
+    implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
 
     // Add Ktor core dependencies
-    implementation("io.ktor:ktor-server-core-jvm")
-    implementation("io.ktor:ktor-server-netty-jvm")
+    implementation("io.ktor:ktor-server-core:$ktor_version")
+    implementation("io.ktor:ktor-server-netty:$ktor_version")
     
     // Add Swagger
     implementation("io.ktor:ktor-server-openapi")
@@ -51,12 +48,14 @@ dependencies {
     // Add logback
     implementation("ch.qos.logback:logback-classic:$logback_version")
 
+    // Add serialization
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+
     // Add logging
     implementation("io.ktor:ktor-server-call-logging:$kotlin_version")
-    implementation("io.ktor:ktor-server-call-logging-jvm:2.3.5")
 
     // Unit tests
-    testImplementation("io.ktor:ktor-server-tests-jvm")
+    testImplementation("io.ktor:ktor-server-tests:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
 
