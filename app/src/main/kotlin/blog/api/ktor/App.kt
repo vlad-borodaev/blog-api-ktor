@@ -3,22 +3,39 @@
  */
 package blog.api.ktor
 
+import blog.api.ktor.plugins.configureRouting
 import io.ktor.server.application.*
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.server.plugins.callloging.*
+import io.ktor.server.request.*
+import io.ktor.util.logging.*
+import org.slf4j.event.Level
 
-fun createServer() {
-    embeddedServer(Netty, port = 3000) {
-        routing {
-            get("/") {
-                call.respondText("Hello, Ktor!")
-            }
+internal val LOGGER = KtorSimpleLogger("blog.api.ktor.CustomLogin")
+
+const val PORT = 3000
+
+fun Application.module() {
+    install(CallLogging) {
+        level = Level.INFO
+        format { call ->
+            val status = call.response.status()
+            val httpMethod = call.request.httpMethod.value
+            val userAgent = call.request.headers["User-Agent"]
+            "Status: $status, Http method: $httpMethod, User Agent: $userAgent"
         }
-    }.start(wait = true)
+        filter { call -> call.request.path().startsWith("/api/v1") }
+    }
+    configureRouting()
+    LOGGER.info("Running application on port $PORT")
 }
 
 fun main() {
-    createServer()
+    embeddedServer(
+        Netty,
+        port = PORT,
+        host = "0.0.0.0",
+        module = Application::module
+    ).start(wait = true)
 }
