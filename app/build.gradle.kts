@@ -37,9 +37,18 @@ dependencies {
     // Add Content Negotiation plugin
     implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
 
+    // Add serialization
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+
     // Add Ktor core dependencies
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")
+
+    // Add CORS
+    implementation("io.ktor:ktor-server-cors:$ktor_version")
+
+    // Add status pages
+    implementation("io.ktor:ktor-server-status-pages:$ktor_version")
     
     // Add Swagger
     implementation("io.ktor:ktor-server-openapi")
@@ -48,11 +57,12 @@ dependencies {
     // Add logback
     implementation("ch.qos.logback:logback-classic:$logback_version")
 
-    // Add serialization
-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
-
     // Add logging
     implementation("io.ktor:ktor-server-call-logging:$kotlin_version")
+
+    // Add YAML dependency to read YAML config
+    implementation("io.ktor:ktor-server-config-yaml:$ktor_version")
+    implementation("io.ktor:ktor-server-cors-jvm:2.3.5")
 
     // Unit tests
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
@@ -68,7 +78,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass.set("blog.api.ktor.AppKt")
+    mainClass.set("io.ktor.server.netty.EngineMain")
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")

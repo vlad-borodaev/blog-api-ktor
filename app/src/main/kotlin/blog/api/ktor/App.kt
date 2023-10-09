@@ -3,18 +3,18 @@
  */
 package blog.api.ktor
 
+import blog.api.ktor.plugins.configureCors
 import blog.api.ktor.plugins.configureRouting
+import blog.api.ktor.plugins.configureSerialization
+import blog.api.ktor.plugins.configureStatusPages
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.callloging.*
 import io.ktor.server.request.*
-import io.ktor.util.logging.*
 import org.slf4j.event.Level
 
-internal val LOGGER = KtorSimpleLogger("blog.api.ktor.CustomLogin")
-
-const val PORT = 3000
+fun main(args: Array<String>): Unit = EngineMain.main(args)
 
 fun Application.module() {
     install(CallLogging) {
@@ -28,14 +28,11 @@ fun Application.module() {
         filter { call -> call.request.path().startsWith("/api/v1") }
     }
     configureRouting()
-    LOGGER.info("Running application on port $PORT")
-}
+    configureSerialization()
+    configureCors()
+    configureStatusPages()
 
-fun main() {
-    embeddedServer(
-        Netty,
-        port = PORT,
-        host = "0.0.0.0",
-        module = Application::module
-    ).start(wait = true)
+    (environment as ApplicationEngineEnvironment).connectors.forEach { connector ->
+        println("Running application on http://:${connector.host}:${connector.port}")
+    }
 }
