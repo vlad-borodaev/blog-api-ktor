@@ -1,4 +1,5 @@
 ktor:
+  development: true
   deployment:
     port: 3000
     connectionGroupSize: 2
@@ -6,7 +7,6 @@ ktor:
     callGroupSize: 10
     shutdownGracePeriod: 2000
     shutdownTimeout: 3000
-    development: true
   application:
     modules:
       - blog.api.ktor.AppKt.module
