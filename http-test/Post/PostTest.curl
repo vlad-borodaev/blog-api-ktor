@@ -1,0 +1,28 @@
+curl -X POST --location "http://127.0.0.1:3000/post"
+    -H "Content-Type: application/json"
+    -d "{
+        \"id\": \"1\",
+        \"title\": \"Test1\",
+        \"description\": \"1 Lorem ipsum dolor sit amet...\",
+        \"rating\": 4,
+    }"
+
+curl -X POST --location "http://127.0.0.1:3000/post"
+    -H "Content-Type: application/json"
+    -d "{
+        \"id\": \"2\",
+        \"title\": \"Test2\",
+        \"description\": \"2 Lorem ipsum dolor sit amet...\",
+        \"rating\": 5,
+    }"
+
+curl -X GET --location "http://127.0.0.1:3000/post"
+    -H "Accept: application/json"
+
+curl -X GET --location "http://127.0.0.1:3000/post/2"
+    -H "Accept: application/json"
+
+curl -X GET --location "http://127.0.0.1:3000/post/3454"
+    -H "Accept: application/json"
+
+curl -X DELETE --location "http://127.0.0.1:3000/post/1"
