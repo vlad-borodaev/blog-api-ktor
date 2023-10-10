@@ -1,0 +1,38 @@
+###
+POST http://127.0.0.1:3000/post
+Content-Type: application/json
+
+{
+  "id": "1",
+  "title": "Test1",
+  "description": "1 Lorem ipsum dolor sit amet...",
+  "rating": 4
+}
+
+
+###
+POST http://127.0.0.1:3000/post
+Content-Type: application/json
+
+{
+  "id": "2",
+  "title": "Test2",
+  "description": "2 Lorem ipsum dolor sit amet...",
+  "rating": 5
+}
+
+
+###
+GET http://127.0.0.1:3000/post
+Accept: application/json
+
+###
+GET http://127.0.0.1:3000/post/2
+Accept: application/json
+
+###
+GET http://127.0.0.1:3000/post/234567
+Accept: application/json
+
+###
+DELETE http://127.0.0.1:3000/post/1

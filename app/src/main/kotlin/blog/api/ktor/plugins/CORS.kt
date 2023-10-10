@@ -7,7 +7,6 @@ import io.ktor.server.plugins.cors.routing.*
 fun Application.configureCors() {
     install(CORS) {
         val isDevelop = this@configureCors.developmentMode
-        println(isDevelop.toString())
 
         allowMethod(HttpMethod.Options)
         allowMethod(HttpMethod.Get)

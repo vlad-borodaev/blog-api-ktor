@@ -12,7 +12,8 @@ plugins {
     // Add Ktor Gradle plugin
     id("io.ktor.plugin") version "2.3.5"
 
-    kotlin("plugin.serialization") version "1.9.0"
+    // Add Serialization plugin
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.10"
 }
 
 group = "blog.api.ktor"
@@ -40,7 +41,7 @@ dependencies {
     implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
 
     // Add serialization
-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
 
     // Add Ktor core dependencies
     implementation("io.ktor:ktor-server-core:$ktorVersion")
